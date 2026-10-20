@@ -1,0 +1,20 @@
+name: sigma_flutter_example
+description: "Lists the sheets on a Nimbus Cloud account and opens one in Sigma's editor."
+publish_to: 'none'
+
+environment:
+  sdk: ^3.10.8
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sigma_flutter:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

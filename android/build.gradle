@@ -1,0 +1,62 @@
+group = "com.codesyncr.sigma.flutter"
+version = "1.0.0"
+
+buildscript {
+    ext.kotlin_version = "2.2.20"
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.11.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+// The native SDK, from JitPack. An app can pin another release with
+// sigmaAndroidVersion in its gradle.properties; sigmaMavenLocal=true takes a
+// build published to ~/.m2 first (for working on the SDK itself).
+def sigmaAndroidVersion = rootProject.findProperty("sigmaAndroidVersion") ?: "1.0.2"
+
+// The app resolves this plugin's dependencies with its own repositories, so JitPack goes to every project.
+rootProject.allprojects {
+    repositories {
+        if (rootProject.findProperty("sigmaMavenLocal") == "true") mavenLocal()
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    namespace = "com.codesyncr.sigma.flutter"
+
+    compileSdk = 36
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+
+    defaultConfig {
+        // The SDK's floor: Android 8.
+        minSdk = 26
+    }
+
+    dependencies {
+        implementation("com.github.CodeSyncr:sigma-android:$sigmaAndroidVersion")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    }
+}
