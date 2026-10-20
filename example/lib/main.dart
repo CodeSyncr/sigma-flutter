@@ -91,45 +91,21 @@ class SheetPage extends StatefulWidget {
 }
 
 class _SheetPageState extends State<SheetPage> {
-  final _sheet = SigmaSheetController();
-  late String _title = widget.title;
-  String _saved = '';
-
   // In a real app: ask your server, which mints the link with its key.
   Future<String> _link() async =>
       (await _api(widget.cloud, widget.apiKey, 'documents/${widget.id}/link?mode=edit', method: 'POST'))['url'] as String;
 
   void _say(String s) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(s)));
 
+  // The editor's own header has the back arrow, title, save state and sharing.
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(_title),
-            if (_saved.isNotEmpty) Text(_saved, style: Theme.of(context).textTheme.bodySmall),
-          ]),
-          actions: [
-            IconButton(
-              tooltip: 'Export as CSV',
-              icon: const Icon(Icons.download),
-              onPressed: () async {
-                try {
-                  final f = await _sheet.export(SigmaFormat.csv);
-                  _say('${f.filename}: ${f.bytes.length} bytes');
-                } on SigmaError catch (e) {
-                  _say(e.message);
-                }
-              },
-            ),
-          ],
-        ),
-        body: SigmaSheet(
-          link: _link,
-          controller: _sheet,
-          onReady: (d) => setState(() => _title = d.title),
-          onError: (e) => _say('${e.code.name}: ${e.message}'),
-          onTitleChange: (t) => setState(() => _title = t),
-          onSaveStateChange: (s, e) => setState(() => _saved = s == SigmaSaveState.failed ? 'Not saved: ${e?.message}' : s.name),
+        body: SafeArea(
+          bottom: false,
+          child: SigmaSheet(
+            link: _link,
+            onError: (e) => _say('${e.code.name}: ${e.message}'),
+          ),
         ),
       );
 }

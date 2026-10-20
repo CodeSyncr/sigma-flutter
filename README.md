@@ -125,6 +125,16 @@ Your `link` function returns the URL your server got from `POST /documents/:id/l
 | `onSaveStateChange(state, error)` | `saved`, `unsaved`, `saving` or `failed` (with the `SigmaError`). |
 | `onTitleChange(title)` | The sheet was renamed. |
 | `onSaved(at)` | A save landed. |
+| `showHeader`, `showBack`, `showLogo` | The header and its parts; all `true` by default. |
+| `onBack` | What the header's back arrow does; `Navigator.maybePop` when it is not set. |
+
+### The header
+
+Above the formula bar: a back arrow, Sigma's mark, the sheet's title with where its edits are, and sharing; tapping the title renames the sheet. `showHeader: false` removes it (your screen has its own app bar), `showBack` and `showLogo` hide their parts, and `onBack` decides what the arrow does: without it, the arrow pops the route the sheet is on. The editor's menus are its own, the same on Android and iOS whatever your app's theme.
+
+### Who gets Vani
+
+Vani needs a paid Nimbus Cloud plan, and you decide which of your users get it: your server mints the link with `?ai=off` for someone who has not paid you for AI, and their editor has no Vani. The choice is signed into the link, so the app cannot turn it back on.
 
 ### SigmaSheetController
 
@@ -145,7 +155,7 @@ Calls before the sheet has opened throw a `SigmaError` with `SigmaErrorCode.notR
 
 ### What people get
 
-The same editor as the native SDKs: a grid with frozen panes, selection handles, pinch zoom, in-cell and formula-bar editing with function suggestions, drag to fill, and column and row resizing; a format bar (bold, italic, underline, strikethrough, colours, alignment, number formats, borders, text size) with a ⋮ More menu; find and replace; sort that keeps a header row; conditional formatting; notes; charts bound to their cells; Vani AI when your account is on Pro; sharing as Excel or CSV.
+The same editor as the native SDKs: a grid with frozen panes, selection handles, pinch zoom, in-cell and formula-bar editing with function suggestions, drag to fill, and column and row resizing; a format bar (bold, italic, underline, strikethrough, colours, alignment, number formats, borders, text size) with a ⋮ More menu; find and replace; sort that keeps a header row; conditional formatting; notes; charts bound to their cells; Vani AI when your account is on a paid plan and the link allows it; sharing as Excel or CSV.
 
 ## Example
 

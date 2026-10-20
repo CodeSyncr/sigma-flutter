@@ -29,6 +29,6 @@ class SigmaFlutterPlugin : FlutterPlugin, ActivityAware {
     private class Factory(private val messenger: BinaryMessenger, private val activity: () -> Activity?) :
         PlatformViewFactory(StandardMessageCodec.INSTANCE) {
         override fun create(context: Context, viewId: Int, args: Any?): PlatformView =
-            SheetPlatformView(activity() ?: context, messenger, viewId)
+            SheetPlatformView(activity() ?: context, messenger, viewId, args as? Map<*, *>)
     }
 }

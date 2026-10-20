@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import space.nimbusgo.sigma.SigmaException
 import space.nimbusgo.sigma.SigmaFormat
+import space.nimbusgo.sigma.SigmaHeader
 import space.nimbusgo.sigma.SigmaSession
 import space.nimbusgo.sigma.SigmaSheetView
 import kotlin.coroutines.resume
@@ -31,7 +32,7 @@ private class LinkFailed(message: String) : Exception(message)
  * over "sigma_flutter/sheet_<id>": the native side asks Dart for links and
  * reports the phase, save state, title and saves; Dart sends commands.
  */
-internal class SheetPlatformView(private val context: Context, messenger: BinaryMessenger, id: Int) :
+internal class SheetPlatformView(private val context: Context, messenger: BinaryMessenger, id: Int, private val params: Map<*, *>?) :
     PlatformView, MethodChannel.MethodCallHandler {
     private val channel = MethodChannel(messenger, "sigma_flutter/sheet_$id")
     private val container = FrameLayout(context)
@@ -76,6 +77,13 @@ internal class SheetPlatformView(private val context: Context, messenger: Binary
         }
         session = s
         val v = SigmaSheetView(context)
+        v.header = SigmaHeader(
+            visible = params?.get("header") as? Boolean ?: true,
+            back = params?.get("back") as? Boolean ?: true,
+            logo = params?.get("logo") as? Boolean ?: true,
+        )
+        // Dart decides what back means: its onBack, or popping the route.
+        v.onBack = { channel.invokeMethod("back", null) }
         v.open(s)
         sheet = v
         container.addView(v, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))

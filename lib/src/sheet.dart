@@ -14,9 +14,10 @@ typedef SigmaLinkProvider = Future<String> Function();
 
 const _viewType = 'sigma_flutter/sheet';
 
-/// Sigma's native spreadsheet editor: formula bar, format bar, grid, charts,
-/// find and replace, notes, Vani AI, sheet tabs and sharing, saving as people
-/// edit. On Android and iOS only; elsewhere it shows a note and reports
+/// Sigma's native spreadsheet editor: a header with a back arrow, Sigma's mark,
+/// the title and sharing; the formula bar, format bar, grid, charts, find and
+/// replace, notes, Vani AI and sheet tabs, saving as people edit. On Android
+/// and iOS only; elsewhere it shows a note and reports
 /// [SigmaErrorCode.unsupportedPlatform].
 class SigmaSheet extends StatefulWidget {
   const SigmaSheet({
@@ -28,6 +29,10 @@ class SigmaSheet extends StatefulWidget {
     this.onSaveStateChange,
     this.onTitleChange,
     this.onSaved,
+    this.showHeader = true,
+    this.showBack = true,
+    this.showLogo = true,
+    this.onBack,
   });
 
   /// Asked for a signed link when the sheet opens, and again whenever one
@@ -50,6 +55,21 @@ class SigmaSheet extends StatefulWidget {
 
   /// A save landed.
   final ValueChanged<DateTime>? onSaved;
+
+  /// Show the editor's header. Turn it off when your screen has its own app bar.
+  final bool showHeader;
+
+  /// Show the header's back arrow.
+  final bool showBack;
+
+  /// Show Sigma's mark beside the title.
+  final bool showLogo;
+
+  /// What the back arrow does. Without it, the arrow pops the route the
+  /// sheet is on ([Navigator.maybePop]).
+  final VoidCallback? onBack;
+
+  Map<String, Object?> get _creationParams => {'header': showHeader, 'back': showBack, 'logo': showLogo};
 
   @override
   State<SigmaSheet> createState() => _SigmaSheetState();
@@ -91,7 +111,9 @@ class _SigmaSheetState extends State<SigmaSheet> {
     unawaited(channel.invokeMethod<void>('start'));
   }
 
-  Future<Object?> _handle(MethodCall call) => handleSheetCall(call, widget);
+  Future<Object?> _handle(MethodCall call) => handleSheetCall(call, widget, pop: () {
+        if (mounted) Navigator.maybePop(context);
+      });
 
   Future<T?> _call<T>(String method, [Object? arguments]) async {
     final channel = _channel;
@@ -123,6 +145,7 @@ class _SigmaSheetState extends State<SigmaSheet> {
         viewType: _viewType,
         onPlatformViewCreated: _created,
         gestureRecognizers: _gestures,
+        creationParams: widget._creationParams,
         creationParamsCodec: const StandardMessageCodec(),
       );
     }
@@ -139,6 +162,7 @@ class _SigmaSheetState extends State<SigmaSheet> {
           id: params.id,
           viewType: _viewType,
           layoutDirection: Directionality.maybeOf(context) ?? TextDirection.ltr,
+          creationParams: widget._creationParams,
           creationParamsCodec: const StandardMessageCodec(),
           onFocus: () => params.onFocusChanged(true),
         );
@@ -154,8 +178,9 @@ class _SigmaSheetState extends State<SigmaSheet> {
 
 /// What a [SigmaSheet] does with a call from its native view: answer a link
 /// request with the widget's `link` function, or pass news to its callbacks.
+/// [pop] is the back arrow's default, when the widget has no `onBack`.
 @visibleForTesting
-Future<Object?> handleSheetCall(MethodCall call, SigmaSheet widget) async {
+Future<Object?> handleSheetCall(MethodCall call, SigmaSheet widget, {VoidCallback? pop}) async {
   final args = (call.arguments as Map<Object?, Object?>?) ?? const {};
   switch (call.method) {
     case 'link':
@@ -179,6 +204,8 @@ Future<Object?> handleSheetCall(MethodCall call, SigmaSheet widget) async {
       widget.onTitleChange?.call(args['title'] as String? ?? '');
     case 'saved':
       widget.onSaved?.call(DateTime.fromMillisecondsSinceEpoch((args['at'] as num? ?? 0).toInt()));
+    case 'back':
+      (widget.onBack ?? pop)?.call();
   }
   return null;
 }

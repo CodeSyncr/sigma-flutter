@@ -95,6 +95,15 @@ void main() {
     });
   });
 
+  test('the back arrow calls onBack, or pops when there is none', () async {
+    var backs = 0;
+    var pops = 0;
+    await handleSheetCall(const MethodCall('back'), SigmaSheet(link: () async => '', onBack: () => backs++), pop: () => pops++);
+    expect((backs, pops), (1, 0));
+    await handleSheetCall(const MethodCall('back'), SigmaSheet(link: () async => ''), pop: () => pops++);
+    expect((backs, pops), (1, 1));
+  });
+
   test('a controller with no sheet says so', () async {
     await expectLater(SigmaSheetController().save(), throwsA(isA<SigmaError>().having((e) => e.code, 'code', SigmaErrorCode.notReady)));
   });

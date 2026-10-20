@@ -17,7 +17,7 @@ final class SheetFactory: NSObject, FlutterPlatformViewFactory {
     init(messenger: FlutterBinaryMessenger) { self.messenger = messenger }
 
     func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        MainActor.assumeIsolated { SheetPlatformView(frame: frame, id: viewId, messenger: messenger) }
+        MainActor.assumeIsolated { SheetPlatformView(frame: frame, id: viewId, messenger: messenger, params: args as? [String: Any] ?? [:]) }
     }
 
     func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol { FlutterStandardMessageCodec.sharedInstance() }
@@ -38,8 +38,10 @@ final class SheetPlatformView: NSObject, @preconcurrency FlutterPlatformView {
     private var watching = Set<AnyCancellable>()
     /// The last link request ended in a failure from Dart, not the server.
     private var linkFailure: String?
+    private let params: [String: Any]
 
-    init(frame: CGRect, id: Int64, messenger: FlutterBinaryMessenger) {
+    init(frame: CGRect, id: Int64, messenger: FlutterBinaryMessenger, params: [String: Any]) {
+        self.params = params
         container = SheetContainer(frame: frame)
         channel = FlutterMethodChannel(name: "sigma_flutter/sheet_\(id)", binaryMessenger: messenger)
         super.init()
@@ -88,7 +90,12 @@ final class SheetPlatformView: NSObject, @preconcurrency FlutterPlatformView {
             }
         }
         session = s
-        container.show(SigmaSheetView(session: s, controller: controller))
+        var header = SigmaHeader(showsBack: params["back"] as? Bool ?? true, showsLogo: params["logo"] as? Bool ?? true) { [weak self] in
+            // Dart decides what back means: its onBack, or popping the route.
+            self?.channel.invokeMethod("back", arguments: nil)
+        }
+        if params["header"] as? Bool == false { header.isVisible = false }
+        container.show(SigmaSheetView(session: s, controller: controller, header: header))
         watch(s)
         s.start()
     }
