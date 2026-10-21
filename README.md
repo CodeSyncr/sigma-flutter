@@ -8,12 +8,8 @@ This plugin is a thin layer over the native SDKs, so the editor is the native on
 
 ## Install
 
-```yaml
-dependencies:
-  sigma_flutter:
-    git:
-      url: https://github.com/CodeSyncr/sigma-flutter.git
-      ref: 1.0.0
+```bash
+flutter pub add sigma_flutter
 ```
 
 ### iOS
