@@ -1,4 +1,4 @@
-name: sigma_flutter
+name: sigma
 description: Sigma's native spreadsheet editor in Flutter apps, through the Sigma iOS and Android SDKs. Formulas, formatting, charts, Vani AI and saving; your server mints the links.
 version: 1.0.0
 homepage: https://nimbusgo.space/cloud/docs/sigma

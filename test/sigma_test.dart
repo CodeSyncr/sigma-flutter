@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sigma_flutter/sigma_flutter.dart';
-import 'package:sigma_flutter/src/sheet.dart' show handleSheetCall;
+import 'package:sigma/sigma.dart';
+import 'package:sigma/src/sheet.dart' show handleSheetCall;
 
 void main() {
   group('types', () {

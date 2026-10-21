@@ -1,16 +1,16 @@
 // swift-tools-version: 5.9
 // Used when the app has Flutter's Swift Package Manager support on; CocoaPods
-// builds use ../sigma_flutter.podspec instead.
+// builds use ../sigma.podspec instead.
 
 import PackageDescription
 
 let package = Package(
-    name: "sigma_flutter",
+    name: "sigma",
     platforms: [
         .iOS("16.0")
     ],
     products: [
-        .library(name: "sigma-flutter", targets: ["sigma_flutter"])
+        .library(name: "sigma", targets: ["sigma"])
     ],
     dependencies: [
         // The native iOS SDK; Sigma's engine is not in it (a session downloads it).
@@ -18,7 +18,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "sigma_flutter",
+            name: "sigma",
             dependencies: [.product(name: "NimbusSigma", package: "sigma-ios")],
             resources: [.process("PrivacyInfo.xcprivacy")]
         )

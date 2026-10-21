@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name             = 'sigma_flutter'
+  s.name             = 'sigma'
   s.version          = '1.0.0'
   s.summary          = "Sigma's native spreadsheet editor in Flutter apps."
   s.description      = "Sigma's native spreadsheet editor in Flutter apps, through the NimbusSigma iOS SDK."
@@ -7,8 +7,8 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'Commercial', :file => '../LICENSE' }
   s.author           = { 'CodeSyncr' => 'yashkumar12125@gmail.com' }
   s.source           = { :path => '.' }
-  s.source_files     = 'sigma_flutter/Sources/sigma_flutter/**/*.swift'
-  s.resource_bundles = { 'sigma_flutter_privacy' => ['sigma_flutter/Sources/sigma_flutter/PrivacyInfo.xcprivacy'] }
+  s.source_files     = 'sigma/Sources/sigma/**/*.swift'
+  s.resource_bundles = { 'sigma_privacy' => ['sigma/Sources/sigma/PrivacyInfo.xcprivacy'] }
   s.dependency 'Flutter'
   # The native iOS SDK (github.com/CodeSyncr/sigma-ios). It is not on the
   # CocoaPods trunk: the app's Podfile names it with its git tag (see README).

@@ -9,7 +9,7 @@ This plugin is a thin layer over the native SDKs, so the editor is the native on
 ## Install
 
 ```bash
-flutter pub add sigma_flutter
+flutter pub add sigma
 ```
 
 ### iOS
@@ -75,7 +75,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:sigma_flutter/sigma_flutter.dart';
+import 'package:sigma/sigma.dart';
 
 class SheetScreen extends StatefulWidget {
   const SheetScreen({super.key, required this.sheetId});

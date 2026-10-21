@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:sigma_flutter/sigma_flutter.dart';
+import 'package:sigma/sigma.dart';
 
 // A demo: it keeps the key in the app so it can run on its own. A real app
 // keeps the key on its server and asks the server for links.

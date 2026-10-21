@@ -12,7 +12,7 @@ import 'types.dart';
 /// with its `sgm_` key; never put the key in the app.
 typedef SigmaLinkProvider = Future<String> Function();
 
-const _viewType = 'sigma_flutter/sheet';
+const _viewType = 'sigma/sheet';
 
 /// Sigma's native spreadsheet editor: a header with a back arrow, Sigma's mark,
 /// the title and sharing; the formula bar, format bar, grid, charts, find and
@@ -105,7 +105,7 @@ class _SigmaSheetState extends State<SigmaSheet> {
 
   /// The native view exists: listen to it, then let it start (so its first link request has an answerer).
   void _created(int id) {
-    final channel = MethodChannel('sigma_flutter/sheet_$id');
+    final channel = MethodChannel('sigma/sheet_$id');
     _channel = channel;
     channel.setMethodCallHandler(_handle);
     unawaited(channel.invokeMethod<void>('start'));

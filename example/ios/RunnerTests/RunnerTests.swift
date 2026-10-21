@@ -3,7 +3,7 @@ import UIKit
 import XCTest
 
 
-@testable import sigma_flutter
+@testable import sigma
 
 // This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
 //

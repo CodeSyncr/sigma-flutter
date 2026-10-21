@@ -29,12 +29,12 @@ private class LinkFailed(message: String) : Exception(message)
 
 /**
  * One SigmaSheetView and its SigmaSession, talking to its SigmaSheet widget
- * over "sigma_flutter/sheet_<id>": the native side asks Dart for links and
+ * over "sigma/sheet_<id>": the native side asks Dart for links and
  * reports the phase, save state, title and saves; Dart sends commands.
  */
 internal class SheetPlatformView(private val context: Context, messenger: BinaryMessenger, id: Int, private val params: Map<*, *>?) :
     PlatformView, MethodChannel.MethodCallHandler {
-    private val channel = MethodChannel(messenger, "sigma_flutter/sheet_$id")
+    private val channel = MethodChannel(messenger, "sigma/sheet_$id")
     private val container = FrameLayout(context)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var session: SigmaSession? = null

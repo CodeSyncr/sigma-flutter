@@ -5,10 +5,10 @@ import NimbusSigma
 import SwiftUI
 import UIKit
 
-/// Registers the "sigma_flutter/sheet" platform view: Sigma's native editor.
+/// Registers the "sigma/sheet" platform view: Sigma's native editor.
 public final class SigmaFlutterPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
-        registrar.register(SheetFactory(messenger: registrar.messenger()), withId: "sigma_flutter/sheet")
+        registrar.register(SheetFactory(messenger: registrar.messenger()), withId: "sigma/sheet")
     }
 }
 
@@ -27,7 +27,7 @@ final class SheetFactory: NSObject, FlutterPlatformViewFactory {
 private struct LinkFailed: Error { let message: String }
 
 /// One SigmaSheetView and its SigmaSession, talking to its SigmaSheet widget
-/// over "sigma_flutter/sheet_<id>": the native side asks Dart for links and
+/// over "sigma/sheet_<id>": the native side asks Dart for links and
 /// reports the phase, save state, title and saves; Dart sends commands.
 @MainActor
 final class SheetPlatformView: NSObject, @preconcurrency FlutterPlatformView {
@@ -43,7 +43,7 @@ final class SheetPlatformView: NSObject, @preconcurrency FlutterPlatformView {
     init(frame: CGRect, id: Int64, messenger: FlutterBinaryMessenger, params: [String: Any]) {
         self.params = params
         container = SheetContainer(frame: frame)
-        channel = FlutterMethodChannel(name: "sigma_flutter/sheet_\(id)", binaryMessenger: messenger)
+        channel = FlutterMethodChannel(name: "sigma/sheet_\(id)", binaryMessenger: messenger)
         super.init()
         channel.setMethodCallHandler { [weak self] call, result in
             MainActor.assumeIsolated { self?.handle(call, result) ?? result(nil) }

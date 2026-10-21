@@ -131,7 +131,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
-  sigma_flutter:
+  sigma:
     dependency: "direct main"
     description:
       path: ".."

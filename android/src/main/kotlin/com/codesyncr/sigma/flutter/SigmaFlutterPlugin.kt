@@ -10,12 +10,12 @@ import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 
-/** Registers the "sigma_flutter/sheet" platform view: Sigma's native editor. */
+/** Registers the "sigma/sheet" platform view: Sigma's native editor. */
 class SigmaFlutterPlugin : FlutterPlugin, ActivityAware {
     private var activity: Activity? = null
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        binding.platformViewRegistry.registerViewFactory("sigma_flutter/sheet", Factory(binding.binaryMessenger) { activity })
+        binding.platformViewRegistry.registerViewFactory("sigma/sheet", Factory(binding.binaryMessenger) { activity })
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {}
